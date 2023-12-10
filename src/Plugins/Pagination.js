@@ -306,13 +306,6 @@ class Pagination {
     let links = [];
     let hrefs = [];
 
-    let paginationDataObject = {
-      data: this.data.pagination.data,
-      size: this.data.pagination.size,
-      alias: this.alias,
-      pages,
-    };
-
     let hasPermalinkField = Boolean(this.data[this.config.keys.permalink]);
     let hasComputedPermalinkField = Boolean(
       this.data.eleventyComputed &&
@@ -343,7 +336,6 @@ class Pagination {
       };
       Object.assign(
         paginationData.pagination,
-        paginationDataObject,
         this.getOverrideDataPages(items, pageNumber)
       );
 
