@@ -27,6 +27,7 @@ function wrapObject(target, fallback) {
       return Array.from(keys);
     },
     get(target, prop) {
+      // console.log( "handler:get", prop );
       if (prop in target) {
         if (isPlainObject(target[prop]) && prop in fallback) {
           return wrapObject(target[prop], fallback[prop]);
