@@ -546,7 +546,7 @@ class Template extends TemplateContent {
       computedData.addTemplateString(
         parentKey,
         async (innerData) => {
-          return await this.renderComputedData(obj, innerData, true);
+          return await this.renderComputedData(obj, innerData);
         },
         declaredDependencies,
         this.getParseForSymbolsFunction(obj)
