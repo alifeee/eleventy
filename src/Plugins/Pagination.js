@@ -312,8 +312,30 @@ class Pagination {
         this.data.eleventyComputed[this.config.keys.permalink]
     );
 
-    // Reuse parent `template.dataCache` for a small memory efficiency win
-    let parentData = DeepCopy({}, this.data);
+    // Reuse parent `template.data` cache for a small memory efficiency win
+    let collections = this.data.collections;
+    if (collections) {
+      delete this.data.collections;
+    }
+
+    let parentData = DeepCopy(
+      {
+        pagination: {
+          data: this.data.pagination.data,
+          size: this.data.pagination.size,
+          alias: this.alias,
+          pages,
+        },
+      },
+      this.data
+    );
+
+    // Restore skipped collections
+    if (collections) {
+      this.data.collections = collections;
+      // Keep the original reference to the collections, no deep copy!!
+      parentData.collections = collections;
+    }
 
     // TODO future improvement dea: use a light Template wrapper for paged template clones (PagedTemplate?)
     // so that we don’t have the memory cost of the full template (and can reuse the parent
