@@ -564,6 +564,8 @@ class Template extends TemplateContent {
       // Note that `permalink` is only a thing that gets consumed—it does not go directly into generated data
       // this allows computed entries to use page.url or page.outputPath and they’ll be resolved properly
 
+      // TODO Room for optimization here—we don’t need to recalculate `getOutputHref` and `getOutputPath`
+      // TODO Why are these using addTemplateString instead of add
       this.computedData.addTemplateString(
         "page.url",
         async (data) => await this.getOutputHref(data),
@@ -618,9 +620,7 @@ class Template extends TemplateContent {
 
   async getTemplates(data) {
     // no pagination with permalink.serverless
-    let hasPagination = Pagination.hasPagination(data);
-
-    if (!hasPagination) {
+    if (!Pagination.hasPagination(data)) {
       await this.addComputedData(data);
 
       return [
