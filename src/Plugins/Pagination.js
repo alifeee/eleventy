@@ -3,17 +3,7 @@ const lodashGet = require("lodash/get");
 const lodashSet = require("lodash/set");
 const EleventyBaseError = require("../EleventyBaseError");
 const { DeepCopy } = require("../Util/Merge");
-
-function proxyWrap(target, fallback) {
-  return new Proxy(target, {
-    get(target, prop) {
-      if (prop in target) {
-        return target[prop];
-      }
-      return fallback[prop];
-    },
-  });
-}
+const { ProxyWrap } = require("../Util/ProxyWrap");
 
 class PaginationConfigError extends EleventyBaseError {}
 class PaginationError extends EleventyBaseError {}
@@ -355,6 +345,7 @@ class Pagination {
         pagination: {
           items: items[pageNumber],
         },
+        page: {},
       };
       Object.assign(
         paginationData.pagination,
@@ -369,10 +360,8 @@ class Pagination {
         );
       }
 
-      paginationData.page = proxyWrap({}, parentData.page);
-
       // Do *not* deep merge pagination data! See https://github.com/11ty/eleventy/issues/147#issuecomment-440802454
-      let clonedData = proxyWrap(paginationData, parentData);
+      let clonedData = ProxyWrap(paginationData, parentData);
 
       let { rawPath, path, href } = await cloned.getOutputLocations(clonedData);
       // TO DO subdirectory to links if the site doesn’t live at /

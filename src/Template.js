@@ -669,11 +669,6 @@ class Template extends TemplateContent {
       let pageTemplates = await this.paging.getPageTemplates();
       return await Promise.all(
         pageTemplates.map(async (pageEntry, pageNumber) => {
-          if (data.collections) {
-            // Issue #115
-            pageEntry.data.collections = data.collections;
-          }
-
           // eleventyComputed needs to exist on proxy for it to iterate and set data
           if (data.eleventyComputed) {
             pageEntry.data.eleventyComputed = data.eleventyComputed;
